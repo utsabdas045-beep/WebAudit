@@ -26,6 +26,14 @@ class TLSAnalyzer:
             logger.error(f"TLS analysis failed for {self.host}: {e}")
             return {"host": self.host, "error": str(e), "valid": False}
 
+        if not cert:
+            return {
+                "host": self.host,
+                "valid": False,
+                "error": "No certificate data retrieved.",
+                "warnings": ["Could not parse TLS certificate details."]
+            }
+
         subject = dict(x[0] for x in cert.get("subject", []))
         issuer = dict(x[0] for x in cert.get("issuer", []))
 
